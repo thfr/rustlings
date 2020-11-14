@@ -11,8 +11,6 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
 // You need create implementation for a tuple of three integer,
@@ -26,6 +24,19 @@ struct Color {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = String;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        Self::try_from(&[tuple.0, tuple.1, tuple.2][0..])
+        // let try_conversion =
+        //     |tuple: &(i16, i16, i16)| -> Result<Color, <u8 as TryFrom<i16>>::Error> {
+        //         Ok(Self {
+        //             red: u8::try_from(tuple.0)?,
+        //             green: u8::try_from(tuple.1)?,
+        //             blue: u8::try_from(tuple.2)?,
+        //         })
+        //     };
+        // match try_conversion(&tuple) {
+        //     Ok(color) => Ok(color),
+        //     Err(_) => Err("".to_string()),
+        // }
     }
 }
 
@@ -33,6 +44,17 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = String;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        Self::try_from(&arr[0..])
+        // let converted_array: Result<Vec<u8>, <u8 as TryFrom<i16>>::Error> =
+        //     arr.iter().map(|x: &i16| u8::try_from(*x)).collect();
+        // match converted_array {
+        //     Ok(conv_arr) => Ok(Color {
+        //         red: conv_arr[0],
+        //         green: conv_arr[1],
+        //         blue: conv_arr[2],
+        //     }),
+        //     Err(_) => Err("".to_string()),
+        // }
     }
 }
 
@@ -40,6 +62,19 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = String;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err("".into());
+        }
+        let converted_array: Result<Vec<u8>, <u8 as TryFrom<i16>>::Error> =
+            slice.iter().map(|x: &i16| u8::try_from(*x)).collect();
+        match converted_array {
+            Ok(conv_arr) => Ok(Color {
+                red: conv_arr[0],
+                green: conv_arr[1],
+                blue: conv_arr[2],
+            }),
+            Err(_) => Err("".to_string()),
+        }
     }
 }
 
